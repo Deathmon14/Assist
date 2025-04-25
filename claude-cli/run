@@ -1,0 +1,30 @@
+total 24
+drwxrwxr-x 4 deathmonarch deathmonarch 4096 Apr 25 17:14 .
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 16:48 ..
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 17:11 agent
+-rw-rw-r-- 1 deathmonarch deathmonarch  195 Apr 25 16:57 config.json
+-rw-rw-r-- 1 deathmonarch deathmonarch    0 Apr 25 17:14 explain
+-rwxrwxr-x 1 deathmonarch deathmonarch 1266 Apr 25 17:02 main.py
+-rw-rw-r-- 1 deathmonarch deathmonarch    0 Apr 25 17:14 run
+-rw-rw-r-- 1 deathmonarch deathmonarch    0 Apr 25 17:14 search
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 17:11 utils
+total 28
+drwxrwxr-x 4 deathmonarch deathmonarch 4096 Apr 25 17:14 .
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 16:48 ..
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 17:11 agent
+-rw-rw-r-- 1 deathmonarch deathmonarch  195 Apr 25 16:57 config.json
+-rw-rw-r-- 1 deathmonarch deathmonarch    0 Apr 25 17:14 explain
+-rwxrwxr-x 1 deathmonarch deathmonarch 1266 Apr 25 17:02 main.py
+-rw-rw-r-- 1 deathmonarch deathmonarch  578 Apr 25 17:14 run
+-rw-rw-r-- 1 deathmonarch deathmonarch    0 Apr 25 17:14 search
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 17:11 utils
+total 28
+drwxrwxr-x 4 deathmonarch deathmonarch 4096 Apr 25 17:14 .
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 16:48 ..
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 17:11 agent
+-rw-rw-r-- 1 deathmonarch deathmonarch  195 Apr 25 16:57 config.json
+-rw-rw-r-- 1 deathmonarch deathmonarch    0 Apr 25 17:14 explain
+-rwxrwxr-x 1 deathmonarch deathmonarch 1266 Apr 25 17:02 main.py
+-rw-rw-r-- 1 deathmonarch deathmonarch 1156 Apr 25 17:15 run
+-rw-rw-r-- 1 deathmonarch deathmonarch    0 Apr 25 17:14 search
+drwxrwxr-x 3 deathmonarch deathmonarch 4096 Apr 25 17:11 utils
