@@ -1,6 +1,6 @@
 import requests
 import json
-from typing import List, Dict, Optional
+from typing import List, Optional
 from pathlib import Path
 
 class CodingAgent:
@@ -15,55 +15,73 @@ class CodingAgent:
             with open(config_path) as f:
                 config = json.load(f)
             
-            self.base_url = config.get("model", {}).get("api_url", "http://localhost:11434/api")
+            self.base_url = config.get("model", {}).get("api_url", "http://localhost:11434").rstrip('/')
             self.model_name = config.get("model", {}).get("name", "gemma3:12b")
             self.timeout = config.get("model", {}).get("timeout", 60)
             self.temperature = config.get("model", {}).get("temperature", 0.7)
             
         except Exception as e:
             print(f"⚠️ Config error: {e}. Using defaults")
-            self.base_url = "http://localhost:11434/api"
+            self.base_url = "http://localhost:11434"
             self.model_name = "gemma3:12b"
             self.timeout = 60
             self.temperature = 0.7
 
     def query_model(self, prompt: str, max_retries: int = 3) -> str:
-        """Query Ollama with retries and context management"""
-        self.context.append(f"User: {prompt}")
+        """Final corrected query method"""
+        endpoints = [
+            "/api/chat",  # Primary endpoint
+            "/api/generate"  # Fallback endpoint
+        ]
         
         for attempt in range(max_retries):
-            try:
-                response = requests.post(
-                    f"{self.base_url}/generate",
-                    json={
-                        "model": self.model_name,
-                        "prompt": prompt,
-                        "stream": False,
-                        "options": {
-                            "temperature": self.temperature,
-                            "num_ctx": 4096,  # Context window size
-                            "seed": 42  # For reproducibility
-                        },
-                        "context": self._get_recent_context()
-                    },
-                    timeout=self.timeout
-                )
-                response.raise_for_status()
-                
-                result = response.json()
-                self.last_response = result["response"].strip()
-                self.context.append(f"Assistant: {self.last_response}")
-                
-                return self.last_response
-
-            except requests.exceptions.RequestException as e:
-                if attempt == max_retries - 1:
-                    return (
-                        f"⚠️ Model query failed after {max_retries} attempts\n"
-                        f"Error: {str(e)}\n"
-                        f"Try:\n1. ollama serve\n2. ollama pull {self.model_name}"
+            for endpoint in endpoints:
+                try:
+                    # Prepare payload
+                    if endpoint == "/api/chat":
+                        payload = {
+                            "model": self.model_name,
+                            "messages": [{"role": "user", "content": prompt}],
+                            "stream": False,
+                            "options": {"temperature": self.temperature}
+                        }
+                    else:
+                        payload = {
+                            "model": self.model_name,
+                            "prompt": prompt,
+                            "stream": False,
+                            "options": {"temperature": self.temperature}
+                        }
+                    
+                    print(f"Attempt {attempt+1}: Sending to {self.base_url}{endpoint}")
+                    
+                    response = requests.post(
+                        f"{self.base_url}{endpoint}",
+                        json=payload,
+                        timeout=self.timeout
                     )
-                continue
+                    
+                    response.raise_for_status()
+                    result = response.json()
+                    
+                    # Handle response
+                    if endpoint == "/api/chat":
+                        return result.get("message", {}).get("content", "").strip()
+                    return result.get("response", "").strip()
+                    
+                except requests.exceptions.RequestException as e:
+                    print(f"Attempt {attempt+1} on {endpoint} failed: {str(e)}")
+                    continue
+        
+        return (
+            "⚠️ All API attempts failed\n"
+            "Successful curl test confirms API works - check:\n"
+            "1. Your config.json 'api_url' should be: 'http://localhost:11434'\n"
+            "2. No trailing slash in base URL\n"
+            "3. Try the official ollama Python package:\n"
+            "   pip install ollama\n"
+            "   Then use ollama.chat() instead"
+        )
 
     def _get_recent_context(self, max_items: int = 3) -> List[str]:
         """Get most relevant context snippets"""
